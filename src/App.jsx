@@ -27,7 +27,7 @@ const App = () => {
 
     try {
       const response = await axios.post(
-        "https://cors-anywhere.herokuapp.com/https://ra-lykoz-staging.mmd-whitelabel.com/artists",
+        "https://ra-lykoz-staging.mmd-whitelabel.com/artists",
         formData,
         {
           headers: {
