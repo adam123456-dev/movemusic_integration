@@ -1,6 +1,7 @@
 // src/FormComponent.jsx
 
 import React, { useState } from 'react';
+import axios from "axios";
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -17,37 +18,39 @@ const App = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NzY4MjY1LCJpYXQiOjE3Mzg3NjEwNjUsImp0aSI6IjA2N2I3NDM2MTAwNzQ3MGM5ZGNjMzg4ODVkZGFmZTlkIiwidXNlcl9pZCI6MjU5fQ.HVdgrjJBsJNzSuJgj0DKJjT0A48h_vQNETTnJ-tb-xQ';
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NzcyOTcwLCJpYXQiOjE3Mzg3NjU3NzAsImp0aSI6ImIxZGRiNDE5ZjcwMDQ3OWJhMzEyODEyODZjZTZmZTE0IiwidXNlcl9pZCI6MjU5fQ.yMcs3v7wscQ93IfBU_Wm_4YrZhyCee8HkUu3wVP2epg"; // Your JWT token
 
     try {
-      const response = await fetch('https://ra-lykoz-staging.mmd-whitelabel.com/artists', {
-        method: 'POST',
-        headers: {
-          'x-api-key': 'QWOlFCAI.FHpA1xewpV54hV6UlV1i7dlDoT7bJ5TY',
-          'Referer': 'https://ra-lykoz-staging.mmd-whitelabel.com',
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      console.log(response)
+      const response = await axios.post(
+        "https://cors-anywhere.herokuapp.com/https://ra-lykoz-staging.mmd-whitelabel.com/artists",
+        formData,
+        {
+          headers: {
+            "x-api-key": "QWOlFCAI.FHpA1xewpV54hV6UlV1i7dlDoT7bJ5TY",
+            "Referer": "https://ra-lykoz-staging.mmd-whitelabel.com/artists",// Ensure it matches Postman
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Access-Control-Allow-Origin": "*",
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+          }, // Important if API uses cookies/session
+        }
+      );
 
-      const result = await response.json();
-      console.log(result);
-      // Handle success (e.g., show a success message)
+      console.log("Response:", response.data);
     } catch (error) {
-      console.error('Error:', error);
-      // Handle error (e.g., show an error message)
+      if (error.response) {
+        console.error("Error Response:", error.response.data);
+      } else {
+        console.error("Request Failed:", error.message);
+      }
     }
   };
-
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
